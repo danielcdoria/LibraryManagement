@@ -33,4 +33,8 @@ public class BookResponseDto {
     public void setGenre(Book.Genre genre) {
         this.genre = genre;
     }
+
+    public boolean isAvaiable() {
+        return avaiable;
+    }
 }

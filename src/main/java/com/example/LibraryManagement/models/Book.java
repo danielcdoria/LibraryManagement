@@ -56,4 +56,8 @@ public class Book {
     public List<User> getUsers() {
         return users;
     }
+
+    public boolean isAvaiable() {
+        return avaiable;
+    }
 }
