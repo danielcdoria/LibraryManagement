@@ -37,7 +37,7 @@ public class BookService {
     }
 
     public List<BookResponseDto> list(){
-        return bookRepository.findByUser(getLoggedUser())
+        return bookRepository.findByUsers(getLoggedUser())
                 .stream()
                 .map(this::convertToDto)
                 .toList();
@@ -78,7 +78,7 @@ public class BookService {
 
     public List<BookResponseDto> findByGenre(Book.Genre genre){
         User user = getLoggedUser();
-        return bookRepository.findByUserAndGenre(user, genre)
+        return bookRepository.findByUsersAndGenre(user, genre)
                 .stream()
                 .map(this::convertToDto)
                 .toList();
