@@ -1,5 +1,6 @@
 package com.example.LibraryManagement.services;
 
+import com.example.LibraryManagement.dtos.bookDtos.BookRequestDto;
 import com.example.LibraryManagement.dtos.bookDtos.BookResponseDto;
 import com.example.LibraryManagement.models.Book;
 import com.example.LibraryManagement.models.User;
@@ -42,5 +43,44 @@ public class BookService {
                 .toList();
     }
 
-    public BookResponseDto
+    public BookResponseDto create(BookRequestDto dto){
+        User user = getLoggedUser();
+        Book book = new Book(
+                dto.getTitle(),
+                dto.getGenre()
+        );
+        bookRepository.save(book);
+        user.getBooks().add(book);
+        userRepository.save(user);
+        return convertToDto(book);
+    }
+
+    public BookResponseDto findById(Long id){
+        User user = getLoggedUser();
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Book not found."));
+        if (!user.getBooks().contains(book)){
+            throw new IllegalArgumentException("Acess denied");
+        }
+        return convertToDto(book);
+    }
+
+    public String remove(Long id){
+        User user = getLoggedUser();
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        if (!user.getBooks().contains(book)){
+            throw new IllegalArgumentException("Acess denied");
+        }
+        bookRepository.delete(book);
+        return "The book was removed successfully!";
+    }
+
+    public List<BookResponseDto> findByGenre(Book.Genre genre){
+        User user = getLoggedUser();
+        return bookRepository.findByUserAndGenre(user, genre)
+                .stream()
+                .map(this::convertToDto)
+                .toList();
+    }
 }
