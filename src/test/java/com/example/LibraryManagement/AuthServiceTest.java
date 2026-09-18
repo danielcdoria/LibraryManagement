@@ -88,4 +88,12 @@ public class AuthServiceTest {
     }
 
     @Test
+    public void login_whenUserIsNotFound_throwsException(){
+        LoginRequestDto dto = new LoginRequestDto("daniel@gmail.com", "senha");
+        when(repository.findByEmail("daniel@gmail.com")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.login(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("User not found");
+    }
 }
