@@ -15,6 +15,16 @@ public class RegisterRequestDto {
     @NotNull(message = "Role cannot be null")
     private User.Role role;
 
+    public RegisterRequestDto(String name,
+                              String email,
+                              String password,
+                              User.Role role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public String getPassword() {
         return password;
     }
