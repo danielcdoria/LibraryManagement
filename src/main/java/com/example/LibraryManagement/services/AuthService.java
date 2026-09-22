@@ -34,6 +34,7 @@ public class AuthService {
                 dto.getRole()
         );
         String token = jwtUtil.generateToken(user.getEmail());
+        repository.save(user);
         return new AuthResponseDto(token);
     }
 

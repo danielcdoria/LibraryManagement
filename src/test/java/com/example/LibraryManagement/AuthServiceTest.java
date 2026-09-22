@@ -46,7 +46,7 @@ public class AuthServiceTest {
         RegisterRequestDto dto = new RegisterRequestDto("Daniel", "daniel@gmail.com", "senha", User.Role.USER);
         when(repository.findByEmail("daniel@gmail.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("senha")).thenReturn("senhaEncoded");
-        when(jwtUtil.generateToken("danie@gmail.com")).thenReturn("token-fake");
+        when(jwtUtil.generateToken("daniel@gmail.com")).thenReturn("token-fake");
 
         AuthResponseDto result = service.register(dto);
         assertThat(result.getToken()).isEqualTo("token-fake");
@@ -66,14 +66,13 @@ public class AuthServiceTest {
     @Test
     public void login_whenPasswordMatch_savesAndLogin(){
         LoginRequestDto dto = new LoginRequestDto("daniel@gmail.com", "senha");
-        when(repository.findByEmail("daniel@gmail.com")).thenReturn(Optional.empty());
+        when(repository.findByEmail("daniel@gmail.com")).thenReturn(Optional.of(new User()));
         when(passwordEncoder.matches(any(), any())).thenReturn(true);
-        when(jwtUtil.extractEmail("daniel@gmail.com")).thenReturn("token-fake");
+        when(jwtUtil.generateToken("daniel@gmail.com")).thenReturn("token-fake");
 
         AuthResponseDto result = service.login(dto);
 
         assertThat(result.getToken()).isEqualTo("token-fake");
-        verify(repository, times(1)).save(any(User.class));
     }
 
     @Test
